@@ -1,0 +1,182 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Statistiques -->
+<div class="row row-deck row-cards mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="subheader">Machines</div>
+                </div>
+                <div class="h1 mb-3">@ViewBag.NbMachines</div>
+                <div class="d-flex mb-2">
+                    <div>Total du parc</div>
+                </div>
+                <a href="/Machines" class="btn btn-primary btn-sm w-100">
+                    <i class="fa-solid fa-truck-monster me-2"></i>Voir les machines
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="subheader">Reservations</div>
+                <div class="h1 mb-3">@ViewBag.NbReservations</div>
+                <div class="d-flex mb-2">
+                    <div>Total reservations</div>
+                </div>
+                <a href="/Reservations" class="btn btn-primary btn-sm w-100">
+                    <i class="fa-solid fa-calendar-check me-2"></i>Voir les reservations
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="subheader">Clients</div>
+                <div class="h1 mb-3">@ViewBag.NbClients</div>
+                <div class="d-flex mb-2">
+                    <div>Total clients</div>
+                </div>
+                <a href="/Clients" class="btn btn-primary btn-sm w-100">
+                    <i class="fa-solid fa-users me-2"></i>Voir les clients
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="subheader">Maintenances en cours</div>
+                <div class="h1 mb-3">@ViewBag.NbMaintenances</div>
+                <div class="d-flex mb-2">
+                    <div>Machines en maintenance</div>
+                </div>
+                <a href="/Maintenances" class="btn btn-primary btn-sm w-100">
+                    <i class="fa-solid fa-wrench me-2"></i>Voir les maintenances
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-deck row-cards">
+
+    <!-- Dernières réservations -->
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-calendar-check me-2"></i>
+                    Dernieres Reservations
+                </h3>
+                <div class="card-options">
+                    <a href="/Reservations" class="btn btn-sm btn-outline-secondary">
+                        Voir tout
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Machine</th>
+                                <th>Date debut</th>
+                                <th>Date fin</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.DernieresReservations != null)
+                            {
+                                foreach (var r in ViewBag.DernieresReservations)
+                                {
+                                    <tr>
+                                        <td>@r.Client?.Nom @r.Client?.Prenom</td>
+                                        <td>@r.Machine?.Nom</td>
+                                        <td>@r.DateDebut.ToString("dd/MM/yyyy")</td>
+                                        <td>@r.DateFin.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            <span class="badge bg-dark">
+                                                @r.Statut
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        Aucune reservation
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Machines disponibles -->
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-truck-monster me-2"></i>
+                    Machines Disponibles
+                </h3>
+                <div class="card-options">
+                    <a href="/Machines" class="btn btn-sm btn-outline-secondary">
+                        Voir tout
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>Machine</th>
+                                <th>Categorie</th>
+                                <th>Tarif/Jour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.MachinesDisponibles != null)
+                            {
+                                foreach (var m in ViewBag.MachinesDisponibles)
+                                {
+                                    <tr>
+                                        <td>@m.Nom</td>
+                                        <td>@m.Categorie?.Nom</td>
+                                        <td>@m.TarifJournalier DH</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">
+                                        Aucune machine disponible
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

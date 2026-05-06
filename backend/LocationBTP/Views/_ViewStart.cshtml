@@ -1,0 +1,25 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<LocationBTP.Models.Entities.ApplicationUser> SignInManager
+@inject UserManager<LocationBTP.Models.Entities.ApplicationUser> UserManager
+
+@{
+    if (SignInManager.IsSignedIn(User))
+    {
+        if (User.IsInRole("Admin"))
+        {
+            Layout = "_LayoutAdmin";
+        }
+        else if (User.IsInRole("Technicien"))
+        {
+            Layout = "_LayoutTechnicien";
+        }
+        else
+        {
+            Layout = "_LayoutClient";
+        }
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}

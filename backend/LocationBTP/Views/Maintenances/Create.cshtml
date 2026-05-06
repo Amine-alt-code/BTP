@@ -1,0 +1,76 @@
+﻿@model LocationBTP.Models.Entities.Maintenance
+
+@{
+    ViewData["Title"] = "Nouvelle Maintenance";
+}
+
+<h3 class="mb-4">
+    <i class="fa-solid fa-wrench me-2"></i>Nouvelle Maintenance
+</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Statut caché, toujours EnCours à la création -->
+            <input type="hidden" asp-for="Statut" value="EnCours" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Type" class="control-label fw-bold">Type de maintenance</label>
+                <input asp-for="Type" class="form-control"
+                       placeholder="Ex: Pneu, Moteur, Hydraulique..." />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DateDebut" class="control-label fw-bold">Date de début</label>
+                <input asp-for="DateDebut" class="form-control" type="datetime-local" />
+                <span asp-validation-for="DateDebut" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Cout" class="control-label fw-bold">Coût estimé (DH)</label>
+                <input asp-for="Cout" class="form-control" placeholder="0.00" />
+                <span asp-validation-for="Cout" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label fw-bold">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"
+                          placeholder="Décrivez le problème..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="MachineId" class="control-label fw-bold">Machine</label>
+                <select asp-for="MachineId" class="form-control"
+                        asp-items="ViewBag.MachineId">
+                    <option value="">-- Choisir une machine --</option>
+                </select>
+                <span asp-validation-for="MachineId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="TechnicienId" class="control-label fw-bold">Technicien</label>
+                <select asp-for="TechnicienId" class="form-control"
+                        asp-items="ViewBag.TechnicienId">
+                    <option value="">-- Choisir un technicien --</option>
+                </select>
+                <span asp-validation-for="TechnicienId" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <input type="submit" value="Créer la maintenance" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-outline-secondary">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

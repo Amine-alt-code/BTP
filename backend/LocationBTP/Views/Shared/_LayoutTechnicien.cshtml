@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Technicien | LocationBTP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/core@@latest/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="antialiased">
+    <div class="page">
+
+        <!-- Sidebar Technicien -->
+        <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <h1 class="navbar-brand navbar-brand-autodark">
+                    <a href="/">LocationBTP</a>
+                </h1>
+                <div class="collapse navbar-collapse" id="sidebar-menu">
+                    <ul class="navbar-nav pt-lg-3">
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <span class="nav-link-title">
+                                    <i class="fa-solid fa-gauge me-2"></i>Accueil
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="false">
+                                <span class="nav-link-title">
+                                    <i class="fa-solid fa-clipboard-list me-2"></i>Etats des Lieux
+                                </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="EtatDesLieux" asp-action="Index">
+                                    <i class="fa-solid fa-list me-2"></i>Liste
+                                </a>
+                                <a class="dropdown-item" asp-controller="EtatDesLieux" asp-action="Create">
+                                    <i class="fa-solid fa-plus me-2"></i>Nouvel Etat des Lieux
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="false">
+                                <span class="nav-link-title">
+                                    <i class="fa-solid fa-wrench me-2"></i>Maintenances
+                                </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-controller="Maintenances" asp-action="Index">
+                                    <i class="fa-solid fa-list me-2"></i>Liste
+                                </a>
+                                <a class="dropdown-item" asp-controller="Maintenances" asp-action="Create">
+                                    <i class="fa-solid fa-plus me-2"></i>Nouvelle Maintenance
+                                </a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Machines" asp-action="Index">
+                                <span class="nav-link-title">
+                                    <i class="fa-solid fa-truck-monster me-2"></i>Machines
+                                </span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <div class="mt-auto pb-3">
+                        <div class="nav-item text-center">
+                            <i class="fa-solid fa-hard-hat text-white mb-1"></i>
+                            <span class="text-white d-block mb-2">@User.Identity.Name</span>
+                            <span class="badge bg-white text-black mb-2">Technicien</span>
+                            <a class="btn btn-outline-light btn-sm w-100"
+                                   asp-controller="Account"
+                                   asp-action="Logout">
+                                Deconnexion
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </aside>
+
+        <!-- Page content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">@ViewData["Title"]</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="text-center">
+                        &copy; 2026 - LocationBTP | Interface Technicien
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@@tabler/core@@latest/dist/js/tabler.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

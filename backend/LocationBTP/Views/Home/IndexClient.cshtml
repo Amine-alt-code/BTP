@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Catalogue de Machines";
+}
+
+<!-- Hero -->
+<div class="card mb-4" style="background-color: #000000; color: white;">
+    <div class="card-body py-4 px-4">
+        <h2 class="text-white mb-1">Bienvenue sur LocationBTP</h2>
+        <p class="text-white-50 mb-3">
+            Louez les meilleures machines de chantier pour vos projets BTP.
+        </p>
+        <a href="/Reservations/Create" class="btn btn-light">
+            <i class="fa-solid fa-calendar-plus me-2"></i>
+            Faire une reservation
+        </a>
+    </div>
+</div>
+
+<!-- Machines disponibles -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fa-solid fa-truck-monster me-2"></i>
+            Machines Disponibles
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="row row-cards">
+            @if (ViewBag.MachinesDisponibles != null &&
+                 ((IEnumerable<dynamic>)ViewBag.MachinesDisponibles).Any())
+            {
+                foreach (var m in ViewBag.MachinesDisponibles)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-sm h-100">
+
+                            <!-- IMAGE -->
+                            @{
+                                string imageUrl = m.ImageUrl?.ToString();
+                            }
+                            @if (!string.IsNullOrEmpty(imageUrl))
+                            {
+                                <img src="@imageUrl" alt="@m.Nom"
+                                     style="width:100%; height:180px; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div style="width:100%; height:180px; background:#1a1a1a;
+                                    display:flex; align-items:center; justify-content:center;">
+                                    <i class="fa-solid fa-truck-monster fa-3x text-secondary"></i>
+                                </div>
+                            }
+
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">@m.Nom</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="text-muted small">Marque</div>
+                                        <div class="fw-bold">@m.Marque</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Categorie</div>
+                                        <div class="fw-bold">@m.Categorie?.Nom</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Tarif/Jour</div>
+                                        <div class="fw-bold">@m.TarifJournalier DH</div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-muted small">Caution</div>
+                                        <div class="fw-bold">@m.MontantCaution DH</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col">
+                                        <a href="/Machines/Details/@m.Id"
+                                               class="btn btn-outline-dark btn-sm w-100">
+                                            <i class="fa-solid fa-eye me-1"></i>Details
+                                        </a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="/Reservations/Create?machineId=@m.Id"
+                                               class="btn btn-primary btn-sm w-100">
+                                            <i class="fa-solid fa-calendar-plus me-1"></i>Reserver
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center text-muted py-4">
+                    <i class="fa-solid fa-truck-monster fa-3x mb-3"></i>
+                    <p>Aucune machine disponible pour le moment</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

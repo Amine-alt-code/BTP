@@ -1,0 +1,40 @@
+﻿@model LocationBTP.Models.Entities.Technicien
+
+@{
+    ViewData["Title"] = "Supprimer Technicien";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="fa-solid fa-trash me-2"></i>Supprimer Technicien</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Confirmer la suppression</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-danger fw-bold">
+                    Êtes-vous sûr de vouloir supprimer ce technicien ?
+                    Cette action est irréversible.
+                </p>
+                <dl class="row">
+                    <dt class="col-sm-4">Nom</dt>
+                    <dd class="col-sm-8">@Model.Nom @Model.Prenom</dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+                    <dt class="col-sm-4">Téléphone</dt>
+                    <dd class="col-sm-8">@Model.Telephone</dd>
+                </dl>
+                <form asp-action="Delete" class="d-flex gap-2 mt-3">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-trash me-1"></i>Confirmer la suppression
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

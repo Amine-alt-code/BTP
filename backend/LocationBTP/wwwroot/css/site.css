@@ -1,0 +1,161 @@
+/* ===== LocationBTP - Theme Noir & Blanc ===== */
+
+:root {
+    --color-primary: #000000;
+    --color-secondary: #333333;
+    --color-accent: #555555;
+    --color-light: #f8f9fa;
+    --color-border: #dee2e6;
+}
+
+/* Sidebar */
+.navbar-vertical {
+    background-color: #000000 !important;
+    border-right: 1px solid #222;
+}
+
+    .navbar-vertical .nav-link {
+        color: #cccccc !important;
+        font-weight: 500;
+        border-radius: 6px;
+        margin: 2px 8px;
+        transition: all 0.2s;
+    }
+
+        .navbar-vertical .nav-link:hover {
+            background-color: #222222 !important;
+            color: #ffffff !important;
+        }
+
+        .navbar-vertical .nav-link.active {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
+.navbar-brand a {
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-decoration: none;
+    letter-spacing: 1px;
+}
+
+/* Page header */
+.page-header {
+    background-color: #ffffff;
+    border-bottom: 2px solid #000000;
+    padding: 16px 0;
+}
+
+.page-title {
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+/* Cards */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+    .btn-primary:hover {
+        background-color: #333333 !important;
+        border-color: #333333 !important;
+    }
+
+.btn-secondary {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+    color: #000000 !important;
+}
+
+    .btn-secondary:hover {
+        background-color: #f0f0f0 !important;
+    }
+
+/* Tables */
+.table thead th {
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: 600;
+    border: none;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: #000000;
+    box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.15);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #000000;
+}
+
+/* Footer */
+.footer {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 12px 0;
+}
+
+/* Page body */
+.page-body {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 130px);
+}
+
+/* Badges */
+.badge-success {
+    background-color: #000000;
+}
+
+.badge-warning {
+    background-color: #555555;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border: 1px solid #000000;
+    border-radius: 6px;
+}
+
+.dropdown-item:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Login page */
+.card-login {
+    border: 2px solid #000000;
+    border-radius: 10px;
+}
+
+    .card-login .card-header {
+        background-color: #000000;
+        color: #ffffff;
+        text-align: center;
+        padding: 20px;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }

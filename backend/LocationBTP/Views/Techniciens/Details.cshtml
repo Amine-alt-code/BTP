@@ -1,0 +1,44 @@
+﻿@model LocationBTP.Models.Entities.Technicien
+
+@{
+    ViewData["Title"] = "Détails Technicien";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="fa-solid fa-helmet-safety me-2"></i>@Model.Nom @Model.Prenom</h3>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header" style="background:#000;color:#fff;">
+                <h5 class="mb-0"><i class="fa-solid fa-user me-2"></i>Informations</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Nom</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.Nom @Model.Prenom</dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+                    <dt class="col-sm-4">Téléphone</dt>
+                    <dd class="col-sm-8">@Model.Telephone</dd>
+                    <dt class="col-sm-4">Login</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-secondary">@Model.Login</span>
+                    </dd>
+                </dl>
+                <div class="d-flex gap-2 mt-3">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark btn-sm">
+                        <i class="fa-solid fa-pen me-1"></i>Modifier
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-sm">
+                        <i class="fa-solid fa-trash me-1"></i>Supprimer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

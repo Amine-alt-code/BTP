@@ -1,0 +1,313 @@
+﻿@using LocationBTP.Models.Enums
+
+@{
+    ViewData["Title"] = "Tableau de bord Technicien";
+}
+
+<div class="row row-deck row-cards mb-4">
+
+    <!-- Contrats à traiter — État des lieux DÉPART -->
+    @if (ViewBag.ContratsATraiter != null && ((IEnumerable<dynamic>)ViewBag.ContratsATraiter).Any())
+    {
+        <div class="col-12">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="card-title mb-0">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                        États des lieux DÉPART à effectuer
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>Contrat</th>
+                                <th>Machine</th>
+                                <th>Client</th>
+                                <th>Date début</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in ViewBag.ContratsATraiter)
+                            {
+                                <tr>
+                                    <td><span class="fw-bold">@c.Numero</span></td>
+                                    <td>@c.Reservation?.Machine?.Nom</td>
+                                    <td>@c.Reservation?.Client?.Nom @c.Reservation?.Client?.Prenom</td>
+                                    <td>@c.Reservation?.DateDebut.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <a href="/EtatDesLieux/Create?contratId=@c.Id"
+                                               class="btn btn-sm btn-warning text-dark fw-bold">
+                                            <i class="fa-solid fa-clipboard-check me-1"></i>
+                                            Faire l'état départ
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Contrats en cours — État des lieux RETOUR -->
+    @if (ViewBag.ContratsEnCours != null && ((IEnumerable<dynamic>)ViewBag.ContratsEnCours).Any())
+    {
+        <div class="col-12">
+            <div class="card border-info">
+                <div class="card-header" style="background:#0dcaf0;color:#000;">
+                    <h3 class="card-title mb-0">
+                        <i class="fa-solid fa-rotate-left me-2"></i>
+                        États des lieux RETOUR à effectuer
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>Contrat</th>
+                                <th>Machine</th>
+                                <th>Client</th>
+                                <th>Date fin</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in ViewBag.ContratsEnCours)
+                            {
+                                <tr>
+                                    <td><span class="fw-bold">@c.Numero</span></td>
+                                    <td>@c.Reservation?.Machine?.Nom</td>
+                                    <td>@c.Reservation?.Client?.Nom @c.Reservation?.Client?.Prenom</td>
+                                    <td>@c.Reservation?.DateFin.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <a href="/EtatDesLieux/Create?contratId=@c.Id"
+                                               class="btn btn-sm btn-info text-dark fw-bold">
+                                            <i class="fa-solid fa-clipboard-check me-1"></i>
+                                            Faire l'état retour
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Machines en Maintenance -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header" style="background:#000;color:#fff;">
+                <h3 class="card-title mb-0">
+                    <i class="fa-solid fa-wrench me-2"></i>Machines en Maintenance
+                </h3>
+                <div class="card-options">
+                    <a href="/Maintenances/Create" class="btn btn-sm btn-light">
+                        <i class="fa-solid fa-plus me-1"></i>Nouvelle
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Machine</th>
+                            <th>Catégorie</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.MachinesEnMaintenance != null &&
+                             ((IEnumerable<dynamic>)ViewBag.MachinesEnMaintenance).Any())
+                        {
+                            foreach (var m in ViewBag.MachinesEnMaintenance)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@m.Nom</div>
+                                        <div class="text-muted small">@m.Reference</div>
+                                    </td>
+                                    <td>@m.Categorie?.Nom</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fa-solid fa-wrench me-1"></i>En maintenance
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/Machines/Details/@m.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-eye me-1"></i>Détails
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                    Aucune machine en maintenance
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenances en cours -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header" style="background:#000;color:#fff;">
+                <h3 class="card-title mb-0">
+                    <i class="fa-solid fa-list me-2"></i>Maintenances en Cours
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Machine</th>
+                            <th>Type</th>
+                            <th>Date début</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.MaintenancesEnCours != null &&
+                             ((IEnumerable<dynamic>)ViewBag.MaintenancesEnCours).Any())
+                        {
+                            foreach (var m in ViewBag.MaintenancesEnCours)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@m.Machine?.Nom</div>
+                                        <div class="text-muted small">@m.Machine?.Reference</div>
+                                    </td>
+                                    <td>@m.Type</td>
+                                    <td>@m.DateDebut.ToString("dd/MM/yyyy")</td>
+                                    <td class="d-flex gap-1">
+                                        <a href="/Maintenances/Edit/@m.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-pen me-1"></i>Éditer
+                                        </a>
+                                        <a href="/Maintenances/Terminer/@m.Id"
+                                               class="btn btn-sm btn-success"
+                                               onclick="return confirm('Confirmer la fin de cette maintenance ?')">
+                                            <i class="fa-solid fa-circle-check me-1"></i>Terminer
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                    Aucune maintenance en cours
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers états des lieux -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header" style="background:#000;color:#fff;">
+                <h3 class="card-title mb-0">
+                    <i class="fa-solid fa-clipboard-list me-2"></i>Derniers États des Lieux
+                </h3>
+                <div class="card-options">
+                    <a href="/EtatDesLieux/Create" class="btn btn-sm btn-light">
+                        <i class="fa-solid fa-plus me-1"></i>Nouveau
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Machine</th>
+                            <th>Date</th>
+                            <th>Conforme</th>
+                            <th>Photos</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.EtatsDesLieux != null &&
+                             ((IEnumerable<dynamic>)ViewBag.EtatsDesLieux).Any())
+                        {
+                            foreach (var e in ViewBag.EtatsDesLieux)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (e.Type.ToString() == "Depart")
+                                        {
+                                            <span class="badge bg-primary">Départ</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Retour</span>
+                                        }
+                                    </td>
+                                    <td>@e.Contrat?.Reservation?.Machine?.Nom</td>
+                                    <td>@e.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        @if (e.EstConforme)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fa-solid fa-check me-1"></i>Oui
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fa-solid fa-xmark me-1"></i>Non
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            <i class="fa-solid fa-camera me-1"></i>
+                                            @(((IEnumerable<dynamic>)e.Photos)?.Count() ?? 0)
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/EtatDesLieux/Details/@e.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-eye me-1"></i>Détails
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-clipboard text-muted me-2"></i>
+                                    Aucun état des lieux
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

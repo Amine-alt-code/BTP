@@ -1,0 +1,102 @@
+﻿@model IEnumerable<LocationBTP.Models.Entities.EtatDesLieux>
+@using LocationBTP.Models.Enums
+
+@{
+    ViewData["Title"] = "États des Lieux";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="fa-solid fa-clipboard-list me-2"></i>États des Lieux</h3>
+    <a asp-action="Create" class="btn btn-dark">
+        <i class="fa-solid fa-plus me-1"></i>Nouvel État des Lieux
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-vcenter card-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Machine</th>
+                    <th>Contrat</th>
+                    <th>Technicien</th>
+                    <th>Date</th>
+                    <th>Carburant</th>
+                    <th>Conforme</th>
+                    <th>Photos</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.Type == TypeEtatDesLieux.Depart)
+                            {
+                                <span class="badge bg-primary">
+                                    <i class="fa-solid fa-arrow-right me-1"></i>Départ
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fa-solid fa-arrow-left me-1"></i>Retour
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <div class="fw-bold">@item.Contrat?.Reservation?.Machine?.Nom</div>
+                            <div class="text-muted small">@item.Contrat?.Reservation?.Machine?.Reference</div>
+                        </td>
+                        <td>@item.Contrat?.Numero</td>
+                        <td>@item.Technicien?.Nom @item.Technicien?.Prenom</td>
+                        <td>@item.Date.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="progress" style="height:16px;width:80px;">
+                                <div class="progress-bar bg-warning"
+                                     style="width:@item.NiveauCarburant%">
+                                    @item.NiveauCarburant%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            @if (item.EstConforme)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fa-solid fa-check me-1"></i>Oui
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fa-solid fa-xmark me-1"></i>Non
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">
+                                <i class="fa-solid fa-camera me-1"></i>@(item.Photos?.Count ?? 0)
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-dark">
+                                <i class="fa-solid fa-eye me-1"></i>Détails
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-primary ms-1">
+                                <i class="fa-solid fa-pen me-1"></i>Modifier
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-danger ms-1">
+                                <i class="fa-solid fa-trash me-1"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+﻿@{
+    ViewData["Title"] = "Tableau de bord Technicien";
+}
+
+<div class="row row-deck row-cards mb-4">
+
+    <!-- Machines en maintenance -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-wrench me-2"></i>
+                    Machines en Maintenance
+                </h3>
+                <div class="card-options">
+                    <a href="/Maintenances/Create" class="btn btn-sm btn-dark">
+                        <i class="fa-solid fa-plus me-1"></i>Nouvelle
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Machine</th>
+                            <th>Catégorie</th>
+                            <th>Statut</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.MachinesEnMaintenance != null &&
+                             ((IEnumerable<dynamic>)ViewBag.MachinesEnMaintenance).Any())
+                        {
+                            foreach (var m in ViewBag.MachinesEnMaintenance)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@m.Nom</div>
+                                        <div class="text-muted small">@m.Reference</div>
+                                    </td>
+                                    <td>@m.Categorie?.Nom</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="fa-solid fa-wrench me-1"></i>En maintenance
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/Machines/Details/@m.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-eye me-1"></i>Détails
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                    Aucune machine en maintenance
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenances en cours -->
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-list me-2"></i>
+                    Maintenances en Cours
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Machine</th>
+                            <th>Type</th>
+                            <th>Date début</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.MaintenancesEnCours != null &&
+                             ((IEnumerable<dynamic>)ViewBag.MaintenancesEnCours).Any())
+                        {
+                            foreach (var m in ViewBag.MaintenancesEnCours)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@m.Machine?.Nom</div>
+                                        <div class="text-muted small">@m.Machine?.Reference</div>
+                                    </td>
+                                    <td>@m.Type</td>
+                                    <td>@m.DateDebut.ToString("dd/MM/yyyy")</td>
+                                    <td class="d-flex gap-1">
+                                        <a href="/Maintenances/Edit/@m.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-pen me-1"></i>Éditer
+                                        </a>
+                                        <a href="/Maintenances/Terminer/@m.Id"
+                                               class="btn btn-sm btn-success"
+                                               onclick="return confirm('Confirmer la fin de cette maintenance ?')">
+                                            <i class="fa-solid fa-circle-check me-1"></i>Terminer
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
+                                    Aucune maintenance en cours
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Derniers états des lieux -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa-solid fa-clipboard-list me-2"></i>
+                    Derniers États des Lieux
+                </h3>
+                <div class="card-options">
+                    <a href="/EtatDesLieux/Create" class="btn btn-sm btn-dark">
+                        <i class="fa-solid fa-plus me-1"></i>Nouveau
+                    </a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Conforme</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.EtatsDesLieux != null &&
+                             ((IEnumerable<dynamic>)ViewBag.EtatsDesLieux).Any())
+                        {
+                            foreach (var e in ViewBag.EtatsDesLieux)
+                            {
+                                <tr>
+                                    <td>@e.Type</td>
+                                    <td>@e.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        @if (e.EstConforme)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="fa-solid fa-check me-1"></i>Oui
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="fa-solid fa-xmark me-1"></i>Non
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/EtatDesLieux/Details/@e.Id"
+                                               class="btn btn-sm btn-outline-dark">
+                                            <i class="fa-solid fa-eye me-1"></i>Détails
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">
+                                    <i class="fa-solid fa-clipboard text-muted me-2"></i>
+                                    Aucun état des lieux
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

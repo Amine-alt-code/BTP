@@ -1,0 +1,33 @@
+﻿@model LocationBTP.Models.Entities.Reservation
+
+@{
+    ViewData["Title"] = "Demande envoyée !";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-body py-5">
+                    <i class="fa-solid fa-circle-check fa-5x text-success mb-4"></i>
+                    <h3 class="fw-bold">Demande envoyée !</h3>
+                    <p class="text-muted mb-4">
+                        Votre demande de réservation pour la machine
+                        <strong>@Model.Machine?.Nom</strong> a bien été reçue.
+                        Un administrateur va la traiter dans les plus brefs délais.
+                    </p>
+                    <div class="alert alert-light text-start">
+                        <div><strong>Client :</strong> @Model.Client?.Nom @Model.Client?.Prenom</div>
+                        <div><strong>Email :</strong> @Model.Client?.Email</div>
+                        <div><strong>Du :</strong> @Model.DateDebut.ToString("dd/MM/yyyy")</div>
+                        <div><strong>Au :</strong> @Model.DateFin.ToString("dd/MM/yyyy")</div>
+                        <div><strong>Durée :</strong> @Model.CalculerDuree() jours</div>
+                    </div>
+                    <a href="/" class="btn btn-dark mt-3">
+                        <i class="fa-solid fa-home me-2"></i>Retour au catalogue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Faire une réservation";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <div class="card">
+                <div class="card-header" style="background:#000; color:#fff;">
+                    <h4 class="mb-0">
+                        <i class="fa-solid fa-calendar-plus me-2"></i>
+                        Demande de réservation
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    <form method="post" asp-action="Create">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="MachineId" value="@ViewBag.MachineId" />
+
+                        <!-- Machine sélectionnée -->
+                        @if (ViewBag.Machine != null)
+                        {
+                            <div class="alert alert-dark d-flex align-items-center mb-4">
+                                <i class="fa-solid fa-truck-monster fa-2x me-3"></i>
+                                <div>
+                                    <div class="fw-bold">@ViewBag.Machine.Nom</div>
+                                    <small>
+                                        @ViewBag.Machine.Marque — @ViewBag.Machine.TarifJournalier DH/jour
+                                        | Caution : @ViewBag.Machine.MontantCaution DH
+                                    </small>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Infos client -->
+                        <h6 class="fw-bold mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-user me-2"></i>Vos informations
+                        </h6>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nom <span class="text-danger">*</span></label>
+                                <input type="text" name="Nom" class="form-control"
+                                       placeholder="Votre nom" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Prénom <span class="text-danger">*</span></label>
+                                <input type="text" name="Prenom" class="form-control"
+                                       placeholder="Votre prénom" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                                <input type="email" name="Email" class="form-control"
+                                       placeholder="votre@email.com" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Téléphone</label>
+                                <input type="tel" name="Telephone" class="form-control"
+                                       placeholder="06 00 00 00 00" />
+                            </div>
+                        </div>
+
+                        <!-- Dates -->
+                        <h6 class="fw-bold mb-3 border-bottom pb-2">
+                            <i class="fa-solid fa-calendar me-2"></i>Période de location
+                        </h6>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Date de début <span class="text-danger">*</span></label>
+                                <input type="date" name="DateDebut" class="form-control"
+                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" required
+                                       id="dateDebut" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Date de fin <span class="text-danger">*</span></label>
+                                <input type="date" name="DateFin" class="form-control"
+                                       min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required
+                                       id="dateFin" />
+                            </div>
+                            <div class="col-12">
+                                <div id="resumePrix" class="alert alert-success d-none">
+                                    <i class="fa-solid fa-calculator me-2"></i>
+                                    <span id="textePrix"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Notes / Remarques</label>
+                            <textarea name="Notes" class="form-control" rows="3"
+                                      placeholder="Précisez votre chantier, lieu de livraison..."></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-dark flex-grow-1">
+                                <i class="fa-solid fa-paper-plane me-2"></i>Envoyer ma demande
+                            </button>
+                            <a href="/" class="btn btn-outline-secondary">Annuler</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const tarifJournalier = @(ViewBag.Machine != null ? ViewBag.Machine.TarifJournalier : 0);
+        const dateDebut = document.getElementById('dateDebut');
+        const dateFin = document.getElementById('dateFin');
+        const resumePrix = document.getElementById('resumePrix');
+        const textePrix = document.getElementById('textePrix');
+
+        function calculerPrix() {
+            const d1 = new Date(dateDebut.value);
+            const d2 = new Date(dateFin.value);
+            if (d1 && d2 && d2 > d1) {
+                const duree = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+                const ht = duree * tarifJournalier;
+                const tva = ht * 0.20;
+                const total = ht + tva;
+                textePrix.innerHTML = `<strong>${duree} jours</strong> — HT: ${ht.toLocaleString()} DH | TVA 20%: ${tva.toLocaleString()} DH | <strong>Total: ${total.toLocaleString()} DH</strong>`;
+                resumePrix.classList.remove('d-none');
+                dateFin.min = dateDebut.value;
+            } else {
+                resumePrix.classList.add('d-none');
+            }
+        }
+
+        dateDebut.addEventListener('change', calculerPrix);
+        dateFin.addEventListener('change', calculerPrix);
+    </script>
+}

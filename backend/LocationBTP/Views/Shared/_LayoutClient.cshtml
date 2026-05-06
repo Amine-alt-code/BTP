@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LocationBTP</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/core@@latest/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="antialiased">
+    <div class="page">
+
+        <!-- Navbar horizontale pour Client -->
+        <header class="navbar navbar-expand-md navbar-dark" style="background-color: #000000;">
+            <div class="container-xl">
+                <a class="navbar-brand" href="/">
+                    LocationBTP
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-client">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar-client">
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house me-1"></i> Accueil
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Machines" asp-action="Index">
+                                <i class="fa-solid fa-truck-monster me-1"></i> Catalogue Machines
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Reservations" asp-action="Index">
+                                <i class="fa-solid fa-calendar-check me-1"></i> Mes Reservations
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Contrats" asp-action="Index">
+                                <i class="fa-solid fa-file-contract me-1"></i> Mes Contrats
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Cautions" asp-action="Index">
+                                <i class="fa-solid fa-shield me-1"></i> Mes Cautions
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-white">
+                                    <i class="fa-solid fa-user me-1"></i> @User.Identity.Name
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm"
+                                       asp-controller="Account"
+                                       asp-action="Logout">
+                                    Deconnexion
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-light btn-sm"
+                                       asp-controller="Account"
+                                       asp-action="Login">
+                                    Connexion
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page content -->
+        <div class="page-wrapper">
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">@ViewData["Title"]</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <div class="container-xl">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <footer class="footer footer-transparent d-print-none">
+                <div class="container-xl">
+                    <div class="text-center">
+                        &copy; 2026 - LocationBTP | Portail Client
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@@tabler/core@@latest/dist/js/tabler.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

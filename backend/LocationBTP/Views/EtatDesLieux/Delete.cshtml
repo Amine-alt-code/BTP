@@ -1,0 +1,40 @@
+﻿@model LocationBTP.Models.Entities.EtatDesLieux
+@using LocationBTP.Models.Enums
+
+@{
+    ViewData["Title"] = "Supprimer État des Lieux";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Confirmer la suppression</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-danger fw-bold">
+                    Êtes-vous sûr de vouloir supprimer cet état des lieux ?
+                </p>
+                <dl class="row">
+                    <dt class="col-sm-5">Type</dt>
+                    <dd class="col-sm-7">@Model.Type</dd>
+                    <dt class="col-sm-5">Date</dt>
+                    <dd class="col-sm-7">@Model.Date.ToString("dd/MM/yyyy")</dd>
+                    <dt class="col-sm-5">Contrat</dt>
+                    <dd class="col-sm-7">@Model.Contrat?.Numero</dd>
+                    <dt class="col-sm-5">Technicien</dt>
+                    <dd class="col-sm-7">@Model.Technicien?.Nom @Model.Technicien?.Prenom</dd>
+                    <dt class="col-sm-5">Photos</dt>
+                    <dd class="col-sm-7">@(Model.Photos?.Count ?? 0) photo(s) seront supprimées</dd>
+                </dl>
+                <form asp-action="Delete" class="d-flex gap-2 mt-3">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa-solid fa-trash me-1"></i>Confirmer
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

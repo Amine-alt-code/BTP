@@ -1,0 +1,148 @@
+﻿@model LocationBTP.Models.Entities.EtatDesLieux
+@using LocationBTP.Models.Enums
+
+@{
+    ViewData["Title"] = "Modifier État des Lieux";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="fa-solid fa-clipboard-list me-2"></i>Modifier État des Lieux #@Model.Id</h3>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header" style="background:#000;color:#fff;">
+                <h5 class="mb-0">Informations</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Type" class="form-label fw-bold">Type</label>
+                            <select asp-for="Type" class="form-control"
+                                    asp-items="Html.GetEnumSelectList<TypeEtatDesLieux>()">
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Date" class="form-label fw-bold">Date</label>
+                            <input asp-for="Date" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ContratId" class="form-label fw-bold">Contrat</label>
+                        <select asp-for="ContratId" class="form-control" asp-items="ViewBag.ContratId">
+                            <option value="">-- Choisir un contrat --</option>
+                        </select>
+                        <span asp-validation-for="ContratId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TechnicienId" class="form-label fw-bold">Technicien</label>
+                        <select asp-for="TechnicienId" class="form-control" asp-items="ViewBag.TechnicienId">
+                            <option value="">-- Choisir un technicien --</option>
+                        </select>
+                        <span asp-validation-for="TechnicienId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            Niveau carburant :
+                            <span id="valeurCarburant">@Model.NiveauCarburant%</span>
+                        </label>
+                        <input asp-for="NiveauCarburant" type="range" class="form-range"
+                               min="0" max="100" step="5"
+                               oninput="document.getElementById('valeurCarburant').textContent = this.value + '%'" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Observations" class="form-label fw-bold">Observations</label>
+                        <textarea asp-for="Observations" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Observations" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" asp-for="EstConforme" type="checkbox" />
+                            <label class="form-check-label fw-bold" asp-for="EstConforme">
+                                Machine conforme
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Photos existantes -->
+                    @if (Model.Photos != null && Model.Photos.Any())
+                    {
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="fa-solid fa-camera me-1"></i>Photos existantes
+                            </label>
+                            <div class="row g-2">
+                                @foreach (var photo in Model.Photos)
+                                {
+                                    <div class="col-4 col-md-3 position-relative">
+                                        <a href="@photo.CheminFichier" target="_blank">
+                                            <img src="@photo.CheminFichier"
+                                                 class="img-fluid rounded"
+                                                 style="height:100px;width:100%;object-fit:cover;" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Ajouter nouvelles photos -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fa-solid fa-camera me-1"></i>Ajouter des photos
+                        </label>
+                        <input type="file" name="Photos" class="form-control"
+                               multiple accept="image/*"
+                               onchange="previsualiserPhotos(this)" />
+                        <div id="previsualisation" class="row g-2 mt-2"></div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-dark">
+                            <i class="fa-solid fa-save me-1"></i>Enregistrer
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function previsualiserPhotos(input) {
+            const container = document.getElementById('previsualisation');
+            container.innerHTML = '';
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    container.innerHTML += `
+                        <div class="col-4 col-md-3">
+                            <img src="${e.target.result}" class="img-fluid rounded"
+                                 style="height:100px;width:100%;object-fit:cover;" />
+                        </div>`;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+}

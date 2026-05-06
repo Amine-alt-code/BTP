@@ -1,0 +1,64 @@
+﻿@model LocationBTP.Models.Entities.Caution
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Caution</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Montant" class="control-label"></label>
+                <input asp-for="Montant" class="form-control" />
+                <span asp-validation-for="Montant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateVersement" class="control-label"></label>
+                <input asp-for="DateVersement" class="form-control" />
+                <span asp-validation-for="DateVersement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateRemboursement" class="control-label"></label>
+                <input asp-for="DateRemboursement" class="form-control" />
+                <span asp-validation-for="DateRemboursement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Statut" class="control-label"></label>
+                <select asp-for="Statut" class="form-control"></select>
+                <span asp-validation-for="Statut" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModePaiement" class="control-label"></label>
+                <input asp-for="ModePaiement" class="form-control" />
+                <span asp-validation-for="ModePaiement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <input asp-for="Notes" class="form-control" />
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContratId" class="control-label"></label>
+                <select asp-for="ContratId" class="form-control" asp-items="ViewBag.ContratId"></select>
+                <span asp-validation-for="ContratId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

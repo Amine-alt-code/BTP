@@ -1,0 +1,208 @@
+﻿@model LocationBTP.Models.Entities.Reservation
+@using LocationBTP.Models.Enums
+
+@{
+    ViewData["Title"] = "Détails Réservation";
+    var contrat = Model.Contrat;
+    var caution = contrat?.Caution;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="fa-solid fa-calendar-check me-2"></i>Réservation #@Model.Id</h3>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+<div class="row g-4">
+
+    <!-- Infos réservation -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header" style="background:#000; color:#fff;">
+                <h5 class="mb-0"><i class="fa-solid fa-info-circle me-2"></i>Informations</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Client</dt>
+                    <dd class="col-sm-8">
+                        @Model.Client?.Nom @Model.Client?.Prenom<br />
+                        <small class="text-muted">@Model.Client?.Email</small>
+                    </dd>
+                    <dt class="col-sm-4">Machine</dt>
+                    <dd class="col-sm-8">
+                        @Model.Machine?.Nom<br />
+                        <small class="text-muted">@Model.Machine?.Marque — @Model.Machine?.Modele</small>
+                    </dd>
+                    <dt class="col-sm-4">Date début</dt>
+                    <dd class="col-sm-8">@Model.DateDebut.ToString("dd/MM/yyyy")</dd>
+                    <dt class="col-sm-4">Date fin</dt>
+                    <dd class="col-sm-8">@Model.DateFin.ToString("dd/MM/yyyy")</dd>
+                    <dt class="col-sm-4">Durée</dt>
+                    <dd class="col-sm-8">@Model.CalculerDuree() jours</dd>
+                    <dt class="col-sm-4">Statut</dt>
+                    <dd class="col-sm-8">
+                        @switch (Model.Statut)
+                        {
+                            case StatutReservation.EnAttente:
+                                <span class="badge bg-warning text-dark">En attente</span>
+                                break;
+                            case StatutReservation.Confirmee:
+                                <span class="badge bg-success">Confirmée</span>
+                                break;
+                            case StatutReservation.EnCours:
+                                <span class="badge bg-primary">En cours</span>
+                                break;
+                            case StatutReservation.Terminee:
+                                <span class="badge bg-secondary">Terminée</span>
+                                break;
+                            case StatutReservation.Annulee:
+                                <span class="badge bg-danger">Annulée</span>
+                                break;
+                        }
+                    </dd>
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <dt class="col-sm-4">Notes</dt>
+                        <dd class="col-sm-8">@Model.Notes</dd>
+                    }
+                </dl>
+
+                <!-- Boutons actions réservation -->
+                @if (Model.Statut == StatutReservation.EnAttente)
+                {
+                    <div class="d-flex gap-2 mt-3">
+                        <form asp-action="Confirmer" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success">
+                                <i class="fa-solid fa-check me-1"></i>Confirmer la réservation
+                            </button>
+                        </form>
+                        <form asp-action="Annuler" asp-route-id="@Model.Id" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Annuler cette réservation ?')">
+                                <i class="fa-solid fa-xmark me-1"></i>Annuler
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Contrat -->
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header" style="background:#000; color:#fff;">
+                <h5 class="mb-0"><i class="fa-solid fa-file-contract me-2"></i>Contrat</h5>
+            </div>
+            <div class="card-body">
+                @if (contrat != null)
+                {
+                    <dl class="row">
+                        <dt class="col-sm-5">Numéro</dt>
+                        <dd class="col-sm-7 fw-bold">@contrat.Numero</dd>
+                        <dt class="col-sm-5">Date signature</dt>
+                        <dd class="col-sm-7">@contrat.DateSignature.ToString("dd/MM/yyyy")</dd>
+                        <dt class="col-sm-5">Montant HT</dt>
+                        <dd class="col-sm-7">@contrat.MontantHT.ToString("N2") DH</dd>
+                        <dt class="col-sm-5">TVA (20%)</dt>
+                        <dd class="col-sm-7">@contrat.TVA.ToString("N2") DH</dd>
+                        <dt class="col-sm-5">Montant total</dt>
+                        <dd class="col-sm-7 fw-bold text-success fs-5">
+                            @contrat.MontantTotal.ToString("N2") DH
+                        </dd>
+                        <dt class="col-sm-5">Statut contrat</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-success">@contrat.Statut</span>
+                        </dd>
+                    </dl>
+                }
+                else
+                {
+                    <div class="text-center text-muted py-4">
+                        <i class="fa-solid fa-file-circle-xmark fa-3x mb-3"></i>
+                        <p>Aucun contrat généré</p>
+                        <small>Confirmez la réservation pour générer le contrat</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Caution -->
+    @if (caution != null)
+    {
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header" style="background:#000; color:#fff;">
+                    <h5 class="mb-0"><i class="fa-solid fa-shield-halved me-2"></i>Caution</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Montant</dt>
+                                <dd class="col-sm-8 fw-bold fs-5">@caution.Montant.ToString("N2") DH</dd>
+                                <dt class="col-sm-4">Statut</dt>
+                                <dd class="col-sm-8">
+                                    @switch (caution.Statut)
+                                    {
+                                        case StatutCaution.EnAttente:
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                            break;
+                                        case StatutCaution.Versee:
+                                            <span class="badge bg-success">Versée</span>
+                                            break;
+                                        case StatutCaution.Remboursee:
+                                            <span class="badge bg-info">Remboursée</span>
+                                            break;
+                                        case StatutCaution.Retenue:
+                                            <span class="badge bg-danger">Retenue</span>
+                                            break;
+                                    }
+                                </dd>
+                                @if (caution.DateVersement.HasValue)
+                                {
+                                    <dt class="col-sm-4">Date versement</dt>
+                                    <dd class="col-sm-8">@caution.DateVersement.Value.ToString("dd/MM/yyyy")</dd>
+                                }
+                                @if (caution.DateRemboursement.HasValue)
+                                {
+                                    <dt class="col-sm-4">Date remboursement</dt>
+                                    <dd class="col-sm-8">@caution.DateRemboursement.Value.ToString("dd/MM/yyyy")</dd>
+                                }
+                            </dl>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @if (caution.Statut == StatutCaution.EnAttente)
+                            {
+                                <form asp-action="PayerCaution" asp-route-id="@caution.Id"
+                                      method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="modePaiement" value="Virement" />
+                                    <button type="submit" class="btn btn-success w-100 mb-2">
+                                        <i class="fa-solid fa-money-bill me-1"></i>Marquer comme versée
+                                    </button>
+                                </form>
+                            }
+                            @if (caution.Statut == StatutCaution.Versee)
+                            {
+                                <form asp-action="RembourserCaution" asp-route-id="@caution.Id"
+                                      method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-success w-100 mb-2"
+                                            onclick="return confirm('Confirmer le remboursement de la caution ?')">
+                                        <i class="fa-solid fa-rotate-left me-1"></i>Rembourser la caution
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

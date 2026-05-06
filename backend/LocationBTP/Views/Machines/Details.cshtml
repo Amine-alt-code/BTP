@@ -1,0 +1,121 @@
+﻿@model LocationBTP.Models.Entities.Machine
+
+@{
+    ViewData["Title"] = "Détails - " + Model.Nom;
+}
+
+<div class="container py-4">
+    <div class="row g-4">
+
+        <!-- Image -->
+        <div class="col-md-5">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Nom"
+                     class="img-fluid rounded"
+                     style="width:100%; height:320px; object-fit:cover;" />
+            }
+            else
+            {
+                <div class="rounded d-flex align-items-center justify-content-center"
+                     style="width:100%; height:320px; background:#1a1a1a;">
+                    <i class="fa-solid fa-truck-monster fa-5x text-secondary"></i>
+                </div>
+            }
+        </div>
+
+        <!-- Infos -->
+        <div class="col-md-7">
+            <div class="card h-100" style="border:none;">
+                <div class="card-header" style="background:#000; color:#fff;">
+                    <h3 class="mb-0">@Model.Nom</h3>
+                    <small class="text-white-50">Réf : @Model.Reference</small>
+                </div>
+                <div class="card-body">
+
+                    <!-- Statut badge -->
+                    <div class="mb-3">
+                        @if (Model.Statut == LocationBTP.Models.Enums.StatutMachine.Disponible)
+                        {
+                            <span class="badge bg-success fs-6">
+                                <i class="fa-solid fa-circle-check me-1"></i>Disponible
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark fs-6">
+                                <i class="fa-solid fa-wrench me-1"></i>En maintenance
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Détails -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background:#f8f9fa;">
+                                <div class="text-muted small">Marque</div>
+                                <div class="fw-bold">@Model.Marque</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background:#f8f9fa;">
+                                <div class="text-muted small">Modèle</div>
+                                <div class="fw-bold">@Model.Modele</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background:#f8f9fa;">
+                                <div class="text-muted small">Catégorie</div>
+                                <div class="fw-bold">@Model.Categorie?.Nom</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 rounded" style="background:#f8f9fa;">
+                                <div class="text-muted small">Tarif / Jour</div>
+                                <div class="fw-bold text-success">@Model.TarifJournalier.ToString("N2") DH</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 rounded" style="background:#f8f9fa;">
+                                <div class="text-muted small">Caution</div>
+                                <div class="fw-bold">@Model.MontantCaution.ToString("N2") DH</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div class="p-3 rounded mb-3" style="background:#f8f9fa;">
+                            <div class="text-muted small mb-1">Description</div>
+                            <div>@Model.Description</div>
+                        </div>
+                    }
+
+                    <!-- Boutons -->
+                    <div class="d-flex gap-2 mt-3">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model.Id"
+                                   class="btn btn-outline-dark">
+                                <i class="fa-solid fa-pencil me-1"></i>Modifier
+                            </a>
+                        }
+                        <a href="/" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i>Retour au catalogue
+                        </a>
+                        @if (Model.Statut == LocationBTP.Models.Enums.StatutMachine.Disponible)
+                        {
+                            <a href="/Reservations/Create?machineId=@Model.Id"
+                                   class="btn btn-dark ms-auto">
+                                <i class="fa-solid fa-calendar-plus me-1"></i>Réserver
+                            </a>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
